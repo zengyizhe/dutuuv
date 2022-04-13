@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: dlut_auv_description
+    relative_path: robots/dlut_auv.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/dlut_auv.srdf
+  CONFIG:
+    author_name: Yizhe Zeng
+    author_email: zeng_yizhe@foxmail.com
+    generated_timestamp: 1638079349

@@ -1,0 +1,4 @@
+controller_joint_names: [shoulder_azimuth
+      , shoulder_elevation
+      , first_elbow
+      , second_elbow]

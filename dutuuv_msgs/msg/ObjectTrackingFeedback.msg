@@ -1,0 +1,4 @@
+float32 x_deviation
+float32 y_deviation
+float32 goal_area_ratio
+float32 current_area_ratio  

@@ -1,0 +1,91 @@
+<launch>
+    <!-- 启动gazebo世界 -->
+    <!-- <arg name="world_name" default="pool"/> -->
+    <!-- <include file="$(find dutuuv_gazebo_worlds)/launch/$(arg world_name).launch"/> -->
+  
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="-3"/>
+    <arg name="yaw" default="0.0"/>
+    <arg name="joy_id" default="0"/>
+    <arg name="namespace" default="tank"/>
+    <!-- <arg name="use_jt" default="0"/> -->
+  
+    <!-- Default joystick mapping for controlling the vehicle (XBox 360 controller) -->
+    <arg name="axis_x" default="4"/>
+    <arg name="axis_y" default="3"/>
+    <arg name="axis_z" default="1"/>
+    <arg name="axis_yaw" default="0"/>
+    <arg name="deadman_button" default="-1"/>
+    <arg name="exclusion_buttons" default="4,5"/>
+  
+    <!-- Default joystick mapping for the Oberon arm joint control (XBox 360 controller) -->
+    <arg name="axis_azimuth" default="3"/>
+    <arg name="axis_elevation" default="4"/>
+    <arg name="axis_first_elbow" default="1"/>
+    <arg name="axis_second_elbow" default="6"/>
+    <arg name="axis_upper_wrist" default="0"/>
+    <arg name="home_button" default="7"/>
+    <!-- <arg name="oberon_exclusion_button" default="4"/> -->
+    <!-- <arg name="deadman_button" default="5"/> -->
+  
+    <!-- Default joystick mapping for the Oberon arm Jacobian transpose
+         controller (XBox 360 controller) -->
+    <!-- <arg name="axis_oberon_jt_x" default="4"/>
+    <arg name="axis_oberon_jt_y" default="3"/>
+    <arg name="axis_oberon_jt_z" default="1"/>
+    <arg name="axis_oberon_jt_roll" default="6"/>
+    <arg name="axis_oberon_jt_pitch" default="7"/>
+    <arg name="axis_oberon_jt_yaw" default="0"/>
+  
+    <arg name="oberon_exclusion_button" default="4"/>
+    <arg name="oberon_deadman_button" default="5"/>
+  
+    <arg name="gripper_open_button" default="1"/>
+    <arg name="gripper_close_button" default="2"/> -->
+  
+    <include file="$(find dlut_auv_description)/launch/upload_default.launch">
+      <arg name="namespace" value="$(arg namespace)"/>
+      <arg name="x" value="$(arg x)"/>
+      <arg name="y" value="$(arg y)"/>
+      <arg name="z" value="$(arg z)"/>
+      <arg name="yaw" value="$(arg yaw)"/>
+    </include>
+  
+    <include file="$(find dlut_auv_control)/launch/thruster_manager.launch">
+      <arg name="uuv_name" value="$(arg namespace)" />
+      <arg name="model_name" value="dlut_auv" />
+    </include>
+  
+    <group ns="$(arg namespace)">
+      <rosparam file="$(find uuv_control_cascaded_pid)/config/rexrov/inertial.yaml" command="load"/>
+      <rosparam file="$(find uuv_control_cascaded_pid)/config/rexrov/vel_pid_control.yaml" command="load"/>
+  
+      <node pkg="uuv_control_cascaded_pid" type="AccelerationControl.py" name="acceleration_control"
+              output="screen">
+        <param name="tf_prefix" type="string" value="$(arg namespace)/" />
+      </node>
+  
+      <node pkg="uuv_control_cascaded_pid" type="VelocityControl.py" name="velocity_control"
+            output="screen">
+        <remap from="odom" to="/$(arg namespace)/pose_gt"/>
+        <remap from="cmd_accel" to="/$(arg namespace)/cmd_accel"/>
+      </node>
+    </group>
+  
+    <!-- 手柄操纵 -->
+    <arg name="joy_type" default="xbox"/>
+    <arg name="teleop_mode" default="effort"/>
+    <arg name="publish_topic" default="tank/thruster_manager/input"/>
+    
+    <include file="$(find dutuuv_teleop)/launch/$(arg joy_type).launch">
+      <arg name="robot_name" value="tank"/>
+      <arg name="mode" value=""/>
+      <arg name="publish_topic" value="$(arg publish_topic)"/>
+    </include>
+  
+    <!-- rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="--display-config $(find tank_gazebo)/rviz/default.rviz"/>
+  
+</launch>
+  

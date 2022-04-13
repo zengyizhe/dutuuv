@@ -1,0 +1,7 @@
+<launch>
+  <arg name="config_file" value="$(find dutuuv_control)/cfg/max_load.yaml" />
+
+  <node pkg="dutuuv_control" type="command_combinator" name="command_combinator" output="log" >
+    <rosparam command="load" file="$(arg config_file)"/>
+  </node>
+</launch>

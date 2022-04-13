@@ -1,0 +1,19 @@
+material DutUUV/SwimmingPool
+{
+
+  technique
+  {
+    pass
+    {
+      ambient 0.0 0.5 0.5 1.0
+
+      texture_unit
+      {
+        texture ../textures/swimming_pool_texture.jpeg
+        
+        
+        scale 0.1 0.1
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+int16 horizontal_port
+int16 horizontal_stbd
+int16 vertical_port
+int16 vertical_stbd

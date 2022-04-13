@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_namespace" default="tank"/>
+    <node pkg="dutuuv_tasks" type="pickup_sm.py" name="pickup_sm" output="screen">
+        <remap from="cmd_vel" to="$(arg robot_namespace)/cmd_vel"/>
+    </node>
+</launch>

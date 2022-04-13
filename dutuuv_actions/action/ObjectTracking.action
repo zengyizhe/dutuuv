@@ -1,0 +1,9 @@
+# goal definition
+guppy_msgs/ObjectTrackingGoal goal
+---
+# result definition
+# string return
+---
+# feedback
+guppy_msgs/ObjectTrackingFeedback feedback
+

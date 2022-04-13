@@ -1,0 +1,11 @@
+mass: 1862.0
+inertia:
+  ixx: 525.39
+  ixy: 0.0
+  ixz: 0.0
+  iyy: 794.20
+  iyx: 0.0
+  iyz: 0.0
+  izz: 691.23
+  izx: 0.0
+  izy: 0.0

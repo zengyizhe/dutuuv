@@ -1,0 +1,16 @@
+accel_pid:
+
+  # linear:
+
+
+  angular:
+
+    roll:
+      x: 0
+
+    pitch:
+      y: 1
+    yaw:
+      kp: 3.0 
+      ki: 0.01
+      kd: 0.0

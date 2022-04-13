@@ -1,0 +1,7 @@
+darknet_ros_topic: /detected_objects_in_image
+output_bbx3d_topic: /darknet_ros_3d/bounding_boxes
+point_cloud_topic: /dlut_auv/dlut_auv/camera/camera_cloud
+working_frame: dlut_auv/camera_link_optical
+mininum_detection_thereshold: 0.1
+minimum_probability: 0.1
+interested_classes: ["person", "elephant", "horse", "bottle", "toothbrush", "traffic light", "spoon", "scissors", "sports ball", "echinus"]

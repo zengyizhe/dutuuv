@@ -1,0 +1,18 @@
+controller_list:
+  - name: fake_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - shoulder_azimuth
+      - shoulder_elevation
+      - first_elbow
+      - second_elbow
+  - name: fake_hand_controller
+    type: $(arg execution_type)
+    joints:
+      - lower_wrist
+      - upper_wrist
+initial:  # Define initial robot poses.
+  - group: arm
+    pose: start
+  - group: hand
+    pose: open

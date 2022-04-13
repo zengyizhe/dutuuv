@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="joy_name" default="xbox"/>
+    <arg name="debug" default="true"/>
+    <arg name="pwm" default="true"/>
+    
+
+    <include file="$(find guppy_bringup)/launch/bringup.launch">
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="pwm" value="$(arg pwm)"/>
+    </include>
+
+    <include file="$(find guppy_teleop)/launch/joy_velocity_teleop.launch">
+        <arg name="joy_name" value="$(arg joy_name)"/>
+    </include>
+
+</launch>

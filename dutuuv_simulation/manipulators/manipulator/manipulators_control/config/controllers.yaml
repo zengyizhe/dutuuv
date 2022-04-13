@@ -1,0 +1,29 @@
+my_manipulator:
+
+  arm_controller:
+    type: "position_controllers/JointTrajectoryController"
+    joints: 
+      - shoulder_azimuth
+      - shoulder_elevation
+      - first_elbow
+      - second_elbow
+
+  hand_controller:
+    type: "position_controllers/JointGroupPositionController"
+    joints:
+      - upper_jaws_joint
+      - lower_jaws_joint
+
+  # upper_jaws_controller:
+    # type: "effort_controllers/JointPositionController"
+    # joints:
+      # - upper_jaws_joint
+    # pid: {p: 100, i: 0, d: 0} 
+# 
+# 
+  # lower_jaws_controller:
+    # type: "effort_controllers/JointPositionController"
+    # joints:
+      # - lower_jaws_joint
+    # pid: {p: 100, i: 0, d: 0} 
+

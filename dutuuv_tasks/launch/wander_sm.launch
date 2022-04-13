@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_namespace" default="tank"/>
+    <node pkg="dutuuv_tasks" type="wander_sm.py" name="wander_sm" output="screen">
+        <remap from="cmd_vel" to="$(arg robot_namespace)/cmd_vel"/>
+        <remap from="cmd_force" to="$(arg robot_namespace)/cmd_force"/>
+    </node>
+</launch>

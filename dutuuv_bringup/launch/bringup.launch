@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="debug" default="true"/>
+    <arg name="pwm" default="true"/>
+
+
+    <machine name="guppy" address="192.168.137.2" env-loader="/home/pi/zyz_ws/env.sh" user="pi" password="123456" timeout="10.0"/>
+
+    <node if="$(arg pwm)" machine="guppy" pkg="guppy_drivers" type="pca9685.py" name="pwm_servo_driver" output="log" respawn="false"/>        
+
+    <arg name="video_device" default="/dev/video0"/>
+    <arg name="image_width" default="640"/>
+    <arg name="image_height" default="480"/>
+    <arg name="pixel_format" default="yuyv"/>
+    <arg name="camera_frame_id" default="usb_cam"/>
+    <arg name="io_method" default="mmap"/>
+
+    <node machine="guppy" name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+        <param name="video_device" value="$(arg video_device)" />
+        <param name="image_width" value="$(arg image_width)" />
+        <param name="image_height" value="$(arg image_height)" />
+        <param name="pixel_format" value="$(arg pixel_format)" />
+        <param name="camera_frame_id" value="$(arg camera_frame_id)" />
+        <param name="io_method" value="$(arg io_method)"/>
+    </node>
+
+
+    <node machine="guppy" pkg="guppy_drivers" type="m10.py" name="depth_sensor" output="log" respawn="false"  />
+    <node machine="guppy" pkg="guppy_drivers" type="MPU6050.py" name="imu" output="screen" respawn="false" />
+    
+  
+  
+  
+    <include file="$(find guppy_control)/launch/all.launch" />
+
+
+    <group if="$(arg debug)">
+        <node pkg="rqt_graph" type="rqt_graph" name="rqt_graph_node"/>
+        <node pkg="rqt_image_view" type="rqt_image_view" name="rqt_image_view"/>
+        <node pkg="rqt_plot" type="rqt_plot" name="rqt_plot_node"/>            
+        <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui_node"/>        
+    </group>
+
+
+        
+
+</launch>

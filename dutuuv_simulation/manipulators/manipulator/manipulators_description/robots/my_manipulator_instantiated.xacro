@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2016 The UUV Simulator Authors.
+     All rights reserved.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<robot name="my_manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Import serial arm -->
+  <xacro:include filename="$(find my_manipulator_description)/robots/my_manipulator_macro.xacro" />
+
+  <link name="world"/>
+
+  <xacro:my_manipulator_loaded namespace="my_manipulator" parent="world">
+    <origin xyz="0 0 1.5" rpy="0 0 0"/>
+  </xacro:my_manipulator_loaded>
+</robot>

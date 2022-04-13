@@ -1,0 +1,9 @@
+# goal definition
+dutuuv_msgs/Steering goal 
+---
+# result definition
+# int16 result
+---
+# feedback definition
+# float32 feedback
+

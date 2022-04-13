@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_namespace" default="tank"/>
+    <arg name="robot_type" default="tank"/>
+    <arg name="joy_type" default="xbox"/>
+    <arg name="cmd_vel_topic" default="$(arg robot_namespace)/cmd_vel"/>
+    <arg name="cmd_force_topic" default="$(arg robot_namespace)/cmd_force"/>
+    
+    <node pkg="joy" type="joy_node" name="joy" output="log" respawn="true" respawn_delay="0">
+        <!-- <param name="autorepeat_rate" value="50"/> -->
+    </node>
+
+    <node pkg="dutuuv_teleop" type="JoyTeleop.py" name="joy_velocity" output="screen" respawn="true" respawn_delay="0"> 
+        <rosparam file="$(find dutuuv_teleop)/config/$(arg robot_type)/velocity_limits.yaml" command="load"/>  
+        <rosparam file="$(find dutuuv_teleop)/config/$(arg robot_type)/effort_limits.yaml" command="load"/>  
+        <rosparam file="$(find dutuuv_teleop)/config/$(arg joy_type)_mapping.yaml" command="load"/>
+        <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+        <remap from="cmd_force" to="$(arg cmd_force_topic)"/>
+    </node>
+</launch>

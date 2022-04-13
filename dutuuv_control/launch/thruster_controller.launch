@@ -1,0 +1,7 @@
+<launch>
+  <arg name="properties_file" value="$(find dutuuv_control)/cfg/dutuuv_properties.yaml" />
+
+  <node pkg="dutuuv_control" type="thruster_controller" name="thruster_controller" output="screen" >
+    <param name="properties_file" type="string" value="$(arg properties_file)" />
+  </node>
+</launch>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <include file="$(find guppy_bringup)/launch/bringup.launch">
+        <arg name="debug" value="true"/>
+        <arg name="thrust" value="true"/>
+    </include>
+
+    <include file="$(find guppy_perception)/launch/yolov5.launch"> 
+        <!-- Camera topic and weights, config and classes files -->
+        <arg name="image_topic"	                value="/usb_cam/image_raw"/>
+        <arg name="weights_path"	            value="$(find yolov5_pytorch_ros)/src/weights/best_ball.pt"/>
+
+        <!-- Published topics -->
+        <arg name="publish_image"	            value="true"/>
+        <arg name="detected_objects_topic"      value="yolov5/bboxes"/>
+        <arg name="detections_image_topic"      value="yolov5/image_with_bboxes"/>
+
+        <!-- Detection confidence -->
+        <arg name="confidence"                  value="0.6"/>
+    </include>
+
+    <node pkg="guppy_control" type="object_tracking_action_server.py" name="object_tracking_action_server" output="screen" required="true">
+        <rosparam file="$(find guppy_control)/cfg/object_tracking.yaml" command="load"/>
+    </node>
+
+    <node pkg="guppy_tasks" type="object_tracking_sm.py" name="object_tracking_sm" output="screen"/>
+    
+    
+        
+
+</launch>

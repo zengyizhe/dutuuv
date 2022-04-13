@@ -1,0 +1,23 @@
+velocity_control/linear_x_kp: 10.0
+velocity_control/linear_x_ki: 2.0
+velocity_control/linear_x_kd: 0.0
+
+velocity_control/linear_y_kp: 10.0
+velocity_control/linear_y_ki: 2.0
+velocity_control/linear_y_kd: 0.0
+
+velocity_control/linear_z_kp: 10.0
+velocity_control/linear_z_ki: 2.0
+velocity_control/linear_z_kd: 0.0
+
+velocity_control/angular_x_kp: 10.0
+velocity_control/angular_x_ki: 2.0
+velocity_control/angular_x_kd: 1.0
+
+velocity_control/angular_y_kp: 10.0
+velocity_control/angular_y_ki: 2.0
+velocity_control/angular_y_kd: 1.0
+
+velocity_control/angular_z_kp: 10.0
+velocity_control/angular_z_ki: 2.0
+velocity_control/angular_z_kd: 1.0

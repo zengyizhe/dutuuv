@@ -1,0 +1,106 @@
+<launch>
+  
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="-3"/>
+    <arg name="yaw" default="0.0"/>
+    <arg name="joy_id" default="0"/>
+    <arg name="namespace" default="tank"/>
+  
+    <!-- Default joystick mapping for controlling the vehicle (XBox 360 controller) -->
+    <arg name="axis_x" default="4"/>
+    <arg name="axis_y" default="3"/>
+    <arg name="axis_z" default="1"/>
+    <arg name="axis_yaw" default="0"/>
+    <arg name="deadman_button" default="-1"/>
+    <arg name="exclusion_buttons" default="4,5"/>
+  
+    <!-- Default joystick mapping for the Oberon arm joint control (XBox 360 controller) -->
+    <arg name="axis_azimuth" default="3"/>
+    <arg name="axis_elevation" default="4"/>
+    <arg name="axis_first_elbow" default="1"/>
+    <arg name="axis_second_elbow" default="6"/>
+    <arg name="axis_upper_wrist" default="0"/>
+    <arg name="home_button" default="7"/>
+    <!-- <arg name="oberon_exclusion_button" default="4"/> -->
+    <!-- <arg name="deadman_button" default="5"/> -->
+  
+  
+    <include file="$(find tank_description)/launch/upload.launch">
+      <arg name="namespace" value="$(arg namespace)"/>
+      <arg name="x" value="$(arg x)"/>
+      <arg name="y" value="$(arg y)"/>
+      <arg name="z" value="$(arg z)"/>
+      <arg name="yaw" value="$(arg yaw)"/>
+      <arg name="mode" value="gripper"/>
+    </include>
+  
+    <arg name="reset_tam" default="false"/>
+    <include file="$(find tank_control)/launch/start_thruster_manager.launch">
+      <arg name="uuv_name" value="$(arg namespace)" />
+      <arg name="model_name" value="tank" />
+      <arg name="reset_tam" value="$(arg reset_tam)"/>
+    </include>
+  
+    <group ns="$(arg namespace)">
+      <rosparam file="$(find uuv_control_cascaded_pid)/config/rexrov/inertial.yaml" command="load"/>
+      <rosparam file="$(find uuv_control_cascaded_pid)/config/rexrov/vel_pid_control.yaml" command="load"/>
+  
+      <node pkg="uuv_control_cascaded_pid" type="AccelerationControl.py" name="acceleration_control"
+              output="screen">
+        <param name="tf_prefix" type="string" value="$(arg namespace)/" />
+      </node>
+  
+      <node pkg="uuv_control_cascaded_pid" type="VelocityControl.py" name="velocity_control"
+            output="screen">
+        <remap from="odom" to="/$(arg namespace)/pose_gt"/>
+        <remap from="cmd_accel" to="/$(arg namespace)/cmd_accel"/>
+      </node>
+    </group>
+
+    <!-- <group ns="$(arg namespace)"> -->
+
+      <!-- <include file="$(find dutuuv_control)/launch/velocity_controller.launch">  
+        <arg name="robot_namespace" value="$(arg namespace)"/>
+        <arg name="robot_type" value="tank"/>
+      </include>  
+
+   
+      <include file="$(find dutuuv_control)/launch/accel_controller.launch">
+        <arg name="robot_namespace" value="$(arg namespace)"/>
+        <arg name="robot_type" value="tank"/>        
+      </include> -->
+
+    <!-- </group> -->
+
+  
+    <!-- 手柄操纵机器人主体 -->
+    <arg name="robot_type" default="tank"/>
+    <arg name="joy_type" default="xbox"/>
+    <arg name="cmd_vel_topic" default="$(arg namespace)/cmd_vel"/>
+    <arg name="cmd_force_topic" default="$(arg namespace)/cmd_force"/>
+    
+    <include file="$(find dutuuv_teleop)/launch/joy_teleop.launch">
+      <arg name="robot_type" value="tank"/>
+      <arg name="joy_type" value="$(arg joy_type)"/>
+      <arg name="cmd_vel_topic" value="$(arg cmd_vel_topic)"/>
+      <arg name="cmd_force_topic" value="$(arg cmd_force_topic)"/>
+    </include>
+
+    <!-- 机械臂控制 -->
+    <include file="$(find gripper_control)/launch/start_controllers.launch" />
+
+    <!-- 手柄操纵机械臂 -->
+    <arg name="left_jaw_command_topic" default="/tank/left_jaw_controller/command"/>
+    <arg name="right_jaw_command_topic" default="/tank/right_jaw_controller/command"/>
+    <include file="$(find gripper_teleop)/launch/xbox.launch">
+      <arg name="left_jaw_publish_topic" value="$(arg left_jaw_command_topic)"/>
+      <arg name="right_jaw_publish_topic" value="$(arg right_jaw_command_topic)"/>
+    </include>
+  
+    <!-- rviz -->
+    <arg name="rviz" default="false"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" output="screen" args="--display-config $(find tank_gazebo)/rviz/default.rviz"/>
+  
+</launch>
+  

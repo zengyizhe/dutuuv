@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+    <include file="$(find dutuuv_control)/launch/pwm_controller.launch" />
+    <include file="$(find dutuuv_control)/launch/thruster_controller.launch" />
+    <include file="$(find dutuuv_control)/launch/command_combinator.launch" />
+    
+    <include file="$(find dutuuv_control)/launch/depth_velocity_controller.launch" />
+    <include file="$(find dutuuv_control)/launch/depth_controller.launch" />
+    <include file="$(find dutuuv_control)/launch/depth_control_action_server.launch" />
+
+</launch>

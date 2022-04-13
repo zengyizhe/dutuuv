@@ -1,0 +1,48 @@
+# The motor housing for the thruster points in the thruster's positive x-direction
+# All thrusters are assumed to be pointing in the positive body-frame x-direction
+# You MUST define the correct yaw and pitch angle from body-frame TO the thruster frame
+properties: {
+  mass: 5.65, # [kg]
+  # X = F*.8636/W
+  # Y = F*.3683/W
+  # Z = (X - F*.8636/W)/tan(theta)
+
+  center_of_mass: [0.0, 0.0, 0.0], # Relative to port aft foot [X (m),Y(m),Z(m)]
+  #dvl: [0.33, 0, 0.44, -90], # Relative to port aft foot [X (m),Y(m),Z(m), yaw (deg)]
+  #imu: [0.71, 0.19, 0.33], # Relative to port aft foot [X (m),Y(m),Z(m)]
+  inertia: [0.213, 0.193, 0.317], # Principle Inertias [kg-m^2]
+  depth_fully_submerged: 0.1, # [m]
+  thrusters: [ 
+  # Pose (from port aft foot): [x (m), y (m), z (m), yaw (deg), pitch (deg)]
+  # Type: 0 = CCW spin (symbol: -->), 1 = CW spin (symbol: <--)
+    {
+      id: 0,
+      name: "HP",
+      type: 0,
+      enable: true,
+      pose: [-0.084, 0.10689, -0.031606, 0.0, 0.0]
+    },
+    {
+      id: 1,
+      name: "HS",
+      type: 1,
+      enable: true,
+      pose: [-0.084, -0.10689, -0.031606, 0.0, 0.0]
+    },
+    {
+      id: 2,
+      name: "VP",
+      type: 1, 
+      enable: true,
+      pose: [0.004, 0.10489, 0.0207, 0.0, 90.0]
+    },
+    {
+      id: 3,
+      name: "VS",
+      type: 0, 
+      enable: true,
+      pose: [0.004, -0.10489, 0.0207, 0.0, 90.0]
+    }
+
+  ]
+}

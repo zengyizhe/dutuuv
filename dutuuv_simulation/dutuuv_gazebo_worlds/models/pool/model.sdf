@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+<model name="pool">
+  <static>true</static>
+  <link name="pool_link">
+
+  <visual name="ocean_surface">
+    <pose>0 0 0 0 0 0</pose>
+    <cast_shadows>false</cast_shadows>
+    <geometry>
+      <mesh>
+        <uri>file://Media/models/sea_surface_16m_x_12m.dae</uri>
+        <scale>1 1 1</scale>
+      </mesh>
+    </geometry>
+    <material>
+      <script>
+        <uri>file://Media/materials/scripts/waves.material</uri>
+        <name>UUVSimulator/SimpleWaves</name>
+      </script>
+    </material>
+  </visual>
+
+  <visual name="ocean_below">
+    <pose>0 0 0 3.14 0 0</pose>
+    <cast_shadows>false</cast_shadows>
+    <geometry>
+      <mesh>
+        <uri>file://Media/models/sea_surface_16m_x_12m.dae</uri>
+        <scale>1 1 1</scale>
+      </mesh>
+    </geometry>
+    <material>
+      <script>
+        <uri>file://Media/materials/scripts/water.material</uri>
+        <name>UUVSimulator/StaticWater</name>
+      </script>
+    </material>
+  </visual>
+
+    <visual name="floor">
+        <pose>0 0 0 0 0 0</pose>
+        
+        <geometry>
+          <mesh><uri>model://pool/meshes/pool.dae</uri><scale>1 1 1</scale></mesh>
+        </geometry>
+        
+        <material>
+          <script>
+              <uri>file://Media/materials/scripts/swimming_pool.material</uri>
+              <name>DutUUV/SwimmingPool</name>
+          </script>
+        </material>
+    </visual>
+
+    <collision name="floor">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh><uri>model://pool/meshes/pool.stl</uri><scale>1 1 1</scale></mesh>
+        </geometry>
+    </collision>
+
+  </link>
+</model>
+</sdf>

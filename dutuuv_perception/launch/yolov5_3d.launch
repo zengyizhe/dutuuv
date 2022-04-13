@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Config camera image topic  -->
+    <arg name="camera_rgb_topic" default="/dlut_auv/dlut_auv/camera/camera_image" />
+  
+    <!-- Console launch prefix -->
+    <arg name="launch_prefix" default=""/>
+  
+    <!-- Config and weights folder. -->
+    <arg name="yolo_weights_path"          default="$(find darknet_ros)/yolo_network_config/weights"/>
+    <arg name="yolo_config_path"           default="$(find darknet_ros)/yolo_network_config/cfg"/>
+  
+    <!-- ROS and network parameter files -->
+    <arg name="ros_param_file"             default="$(find darknet_ros)/config/ros.yaml"/>
+    <arg name="network_param_file"         default="$(find darknet_ros)/config/yolov2-tiny.yaml"/>
+  
+    <!-- Load parameters -->
+    <rosparam command="load" ns="darknet_ros" file="$(arg network_param_file)"/>
+    <rosparam command="load" file="$(find darknet_ros)/config/ros.yaml"/>
+    <param name="darknet_ros/subscribers/camera_reading/topic" type="string" value="$(arg camera_rgb_topic)" />
+  
+    <!-- Start yolov5_ -->
+    <!-- <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" launch-prefix="$(arg launch_prefix)">
+  
+      <param name="weights_path"          value="$(arg yolo_weights_path)" />
+      <param name="config_path"           value="$(arg yolo_config_path)" />
+    </node> -->
+
+    <arg name="weights_path"	            default="$(find yolov5_pytorch_ros)/src/weights/best_lxf.pt"/>
+
+    <!-- Published topics -->
+    <arg name="publish_image"	            default="true"/>
+    <arg name="detected_objects_topic"      default="detected_objects_in_image"/>
+    <arg name="detections_image_topic"      default="detections_image_topic"/>
+
+    <!-- Detection confidence -->
+    <arg name="confidence"                  default="0.05"/>
+
+    <node pkg="yolov5_pytorch_ros" type="detect.py" name="yolov5_detector">
+      <param name="image_topic"               value="$(arg camera_rgb_topic)"/>
+      <param name="img_size"                  value="640"/>
+      <param name="frame_id"               	value="camera"/>
+      <param name="weights_path"              value="$(arg weights_path)"/>
+      <param name="publish_image"             value="$(arg publish_image)"/>
+      <param name="detected_objects_topic"    value="$(arg detected_objects_topic)"/>
+      <param name="detections_image_topic"    value="$(arg detections_image_topic)"/>
+      <param name="confidence"                value="$(arg confidence)"/>
+    </node>
+  
+    <!-- Start darknet ros 3d -->
+    <node pkg="darknet_ros_3d" type="darknet3d_node" name="darknet_3d" output="screen">
+      <rosparam command="load" file="$(find dlut_auv_perception)/config/darknet_3d.yaml" />
+    </node>
+  </launch>
+                                                                                                                                                                                                            
+                        

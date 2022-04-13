@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- <rosparam file="$(find dlut_auv_manipulator_control)/config/dlut_auv_manipulator_config.yaml" command="load"/>
+  <node pkg="controller_manager" type="spawner" name="controller_spawner" args="dlut_auv_manipulator/shoulder_azimuth_controller 
+  dlut_auv_manipulator/shoulder_elevation_controller dlut_auv_manipulator/joint_state_controller dlut_auv_manipulator/first_elbow_controller
+  dlut_auv_manipulator/second_elbow_controller dlut_auv_manipulator/upper_wrist_controller dlut_auv_manipulator/lower_wrist_controller"/> -->
+
+
+    <arg name="uuv_name" default="dlut_auv"/>
+    <arg name="arm_name" default="dlut_auv_manipulator"/>
+  
+    <rosparam subst_value="true">
+      $(arg uuv_name):
+        $(arg arm_name):
+          <!-- joint_state_controller:
+            type: joint_state_controller/JointStateController
+            publish_rate: 50   -->
+    
+          shoulder_azimuth_controller:
+            type: effort_controllers/JointPositionController
+            joint: shoulder_azimuth
+            pid: {p: 0, i: 0.0, d: 0}
+          shoulder_elevation_controller:
+            type: effort_controllers/JointPositionController
+            joint: shoulder_elevation
+            pid: {p: 400, i: 0.0, d: 0}
+          first_elbow_controller:
+            type: effort_controllers/JointPositionController
+            joint: first_elbow
+            pid: {p: 50, i: 0.0, d: 0}
+        
+          second_elbow_controller:
+            type: effort_controllers/JointPositionController
+            joint: second_elbow
+            pid: {p: 50, i: 0.0, d: 0}
+          upper_wrist_controller:
+            type: effort_controllers/JointPositionController
+            joint: upper_wrist
+            pid: {p: 10, i: 0.0, d: 0}
+        
+          lower_wrist_controller:
+            type: effort_controllers/JointPositionController
+            joint: lower_wrist
+            pid: {p: 10, i: 0.0, d: 0}
+    </rosparam>
+  
+    <group ns="$(arg uuv_name)">
+      <!-- load the controllers -->
+      <node name="controller_spawner_$(arg arm_name)"
+            pkg="controller_manager"
+            type="spawner"
+            respawn="false"
+            output="screen"
+            ns="/$(arg uuv_name)/$(arg arm_name)"
+            args="shoulder_azimuth_controller
+                  shoulder_elevation_controller
+                  first_elbow_controller
+                  second_elbow_controller
+                  upper_wrist_controller
+                  lower_wrist_controller"/>
+  
+    </group>
+  
+
+
+</launch>

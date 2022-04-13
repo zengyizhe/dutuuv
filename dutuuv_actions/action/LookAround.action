@@ -1,0 +1,9 @@
+# goal definition
+ goal
+---
+# result definition
+int16 result
+---
+# feedback definition
+float32 feedback
+

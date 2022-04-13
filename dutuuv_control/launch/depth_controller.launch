@@ -1,0 +1,7 @@
+<launch>
+  <arg name="config_file" value="$(find dutuuv_control)/cfg/depth_controller.yaml" />
+
+  <node pkg="dutuuv_control" type="depth_controller.py" name="depth_controller" output="screen" >
+    <rosparam command="load" file="$(arg config_file)" />
+  </node>
+</launch>

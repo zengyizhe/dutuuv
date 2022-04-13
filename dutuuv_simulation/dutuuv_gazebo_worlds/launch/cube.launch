@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+      <param name="cube_description" textfile="$(find dutuuv_gazebo_worlds)/urdf/cube.urdf"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="cube_spawner" args="-urdf -model cube -param cube_description">
+    
+  </node>
+</launch>

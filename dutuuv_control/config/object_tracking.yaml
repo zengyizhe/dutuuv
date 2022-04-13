@@ -1,0 +1,14 @@
+torque_z_kp: 0.002
+torque_z_ki: 0.0
+torque_z_kd: 0.0
+
+force_z_kp: 0.02
+force_z_ki: 0.0
+force_z_kd: 0.0
+
+force_x_kp: 500.0
+force_x_ki: 0.0
+force_x_kd: 0.0
+
+
+

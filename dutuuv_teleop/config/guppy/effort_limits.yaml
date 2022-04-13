@@ -1,0 +1,3 @@
+force_x_max: 60
+force_z_max: 60
+torque_z_max: 3.0

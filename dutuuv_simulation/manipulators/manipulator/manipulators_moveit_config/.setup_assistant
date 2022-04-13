@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: my_manipulator_description
+    relative_path: robots/my_manipulator_instantiated.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/my_manipulator.srdf
+  CONFIG:
+    author_name: Yizhe Zeng
+    author_email: zeng_yizhe@foxmail.com
+    generated_timestamp: 1637232473

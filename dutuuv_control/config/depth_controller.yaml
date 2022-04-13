@@ -1,0 +1,3 @@
+depth_controller_kp: -2.0
+depth_controller_ki: -0.01
+depth_controller_kd: 0.0

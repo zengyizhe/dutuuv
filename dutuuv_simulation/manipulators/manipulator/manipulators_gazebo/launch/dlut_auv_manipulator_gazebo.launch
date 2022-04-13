@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find dlut_auv_manipulator_description)/robots/dlut_auv_manipulator_instantiate.xacro'" />
+
+
+  <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-urdf -model dlut_auv_manipulator -param robot_description" />
+    
+  <!-- <rosparam file="$(find dlut_auv_manipulator_control)/config/dlut_auv_manipulator_config.yaml" command="load"/> -->
+  <rosparam file="$(find dlut_auv_manipulator_control)/config/JTCartesianController_config.yaml" command="load"/>
+
+  <!-- <node pkg="controller_manager" type="spawner" name="controller_spawner" args="dlut_auv_manipulator/shoulder_azimuth_controller 
+  dlut_auv_manipulator/shoulder_elevation_controller dlut_auv_manipulator/joint_state_controller dlut_auv_manipulator/first_elbow_controller
+  dlut_auv_manipulator/second_elbow_controller dlut_auv_manipulator/upper_wrist_controller dlut_auv_manipulator/lower_wrist_controller"/> -->
+
+  <node pkg="controller_manager" type="spawner" name="controller_spawner" args="dlut_auv_manipulator/arm_controller"/>
+  
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="dlut_auv_manipulator/joint_states" />
+  </node>    
+
+
+
+
+</launch>

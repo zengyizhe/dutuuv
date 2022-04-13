@@ -1,0 +1,1 @@
+rostopic pub -1 /dlut_auv_manipulator/arm_controller/command trajectory_msgs/JointTrajectory '{joint_names: ["shoulder_azimuth", "shoulder_elevation", "second_elbow", "first_elbow", "upper_wrist", "lower_wrist"], points: [{positions: [1.1, -0.5, 2.5, 0.79, -1.3, -1.5], time_from_start: [3, 0]}]}'

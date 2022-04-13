@@ -1,0 +1,18 @@
+controller_list:
+  - name: fake_my_manipulator_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - shoulder_azimuth
+      - shoulder_elevation
+      - first_elbow
+      - second_elbow
+  - name: fake_my_manipulator_hand_controller
+    type: $(arg execution_type)
+    joints:
+      - lower_jaws_joint
+      - upper_jaws_joint
+initial:  # Define initial robot poses.
+  - group: my_manipulator_arm
+    pose: home
+  - group: my_manipulator_hand
+    pose: close

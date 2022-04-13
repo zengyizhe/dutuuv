@@ -1,0 +1,11 @@
+<launch>
+  <arg name="robot_namespace" default="tank"/>
+  <arg name="robot_type" default="tank"/>
+  <node pkg="dutuuv_control" type="VelocityController.py" name="velocity_controller" output="screen" >
+    <rosparam command="load" file="$(find dutuuv_control)/config/$(arg robot_type)/vel_pid_control.yaml" />
+    <remap from="cmd_vel" to="$(arg robot_namespace)/cmd_vel"/>
+    <remap from="cmd_accel" to="$(arg robot_namespace)/cmd_accel"/>
+    <remap from="odom" to="$(arg robot_namespace)/pose_gt"/>
+    
+  </node>
+</launch>

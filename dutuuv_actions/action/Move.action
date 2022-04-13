@@ -1,0 +1,9 @@
+# goal definition
+guppy_msgs/MoveCommand depth_control_action_goal
+---
+# result definition
+
+---
+# feedback definition
+guppy_msgs/MoveActionFeedback depth_control_action_feedback
+

@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2016 The UUV Simulator Authors.
+     All rights reserved.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find my_manipulator_description)/urdf/my_manipulator.gazebo.xacro"/>
+
+    <!-- Transmission Macro -->
+    <xacro:macro name="simple_transmission" params="joint">
+      <transmission name="${joint}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${joint}">
+          <hardwareInterface>PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${joint}_motor">
+          <!-- <hardwareInterface>PositionJointInterface</hardwareInterface> -->
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+    </xacro:macro>
+
+    <xacro:macro name="my_manipulator" params="namespace">
+        
+        <link name="base_link">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${base_width}"
+                        length="${base_length}"
+                        height="${base_height}">
+            <origin xyz="${base_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/base_link.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/collision/base_link.stl" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name="shoulder_link">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${shoulder_width}"
+                        length="${shoulder_length}"
+                        height="${shoulder_height}">
+                <origin xyz="${shoulder_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                   <mesh filename="file://$(find my_manipulator_description)/meshes/visual/shoulder_link.dae" scale="1.0 1.0 1.0"/>            
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/collision/shoulder_link.stl" scale="1.0 1.0 1.0"/>  
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="shoulder_azimuth" type="revolute">
+            <parent link="base_link"/>
+            <child link="shoulder_link"/>
+            <axis xyz="0 0 1"/>
+            <origin xyz="0.010 0.003 0.054" rpy="0.0 0.0 0.0"/>   
+            <limit lower="${radians(-70)}" upper="${radians(70)}" effort="500.0" velocity="${radians(90)}"/>     
+        </joint>
+
+        <xacro:simple_transmission joint="shoulder_azimuth" />
+
+        <!-- UPPER ARM -->
+
+        <link name="upper_arm">
+            <xacro:link_box_inertial mass="2.0"
+                        width="${upper_arm_width}"
+                        length="${upper_arm_length}"
+                        height="${upper_arm_height}">
+                <origin xyz="${upper_arm_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/upper_arm.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0.05" rpy="0 ${0.5*pi} 0"/>
+                <geometry>
+                    <box size="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="shoulder_elevation" type="revolute">
+            <parent link="shoulder_link"/>
+            <child link="upper_arm"/>
+            <axis xyz="0 1 0"/>
+            <origin xyz="0.014 0.004 0.013" rpy="0 0 0"/>
+            <limit lower="${radians(-70)}" upper="${radians(70)}" effort="500.0" velocity="${radians(90)}"/>     
+        </joint>
+
+        <xacro:simple_transmission joint="shoulder_elevation" />
+
+        <!-- MIIDLE ARM -->
+
+        <link name="middle_arm">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${middle_arm_width}"
+                        length="${middle_arm_length}"
+                        height="${middle_arm_height}">
+                <origin xyz="${middle_arm_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/middle_arm.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${0.5*pi} 0"/>
+                <geometry>
+                    <box size="0.01 0.01 0.01"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="first_elbow" type="revolute">
+            <parent link="upper_arm"/>
+            <child link="middle_arm"/>
+            <axis xyz="0.0 1.0 0.0"/>
+            <origin xyz="0.019 0.000 0.225" rpy="0 0 0"/>
+            <limit lower="${radians(-90)}" upper="${radians(90)}" effort="500.0" velocity="${radians(90)}"/>                 
+        </joint>
+
+        <xacro:simple_transmission joint="first_elbow" />
+
+
+       <link name="fore_arm">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${fore_arm_width}"
+                        length="${fore_arm_length}"
+                        height="${fore_arm_height}">
+                <origin xyz="${fore_arm_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/fore_arm.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="0.01" length="0.01"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="second_elbow" type="revolute">
+            <parent link="middle_arm"/>
+            <child link="fore_arm"/>
+            <origin xyz="0.119 0.000 -0.019" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+            <limit lower="${radians(-90)}" upper="${radians(90)}" effort="500.0" velocity="${radians(90)}"/>                 
+        </joint>
+
+        <xacro:simple_transmission joint="second_elbow" />
+
+        <link name="gripper_link">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${upper_hand_width}"
+                        length="${upper_hand_length}"
+                        height="${upper_hand_height}">
+                <origin xyz="${upper_hand_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/gripper_link.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/collision/gripper_link.stl" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="wrist" type="fixed">
+            <parent link="fore_arm"/>
+            <child link="gripper_link"/>            
+            <origin xyz="0.08 0.0 -0.1" rpy="0.0 0.0 0.0"/>
+            <!-- <axis xyz="1 0 0"/> -->
+            <!-- <limit lower="-3.14" upper="3.14" effort="300" velocity="3.14"/> -->
+        </joint>
+
+        <!-- <xacro:simple_transmission joint="wrist" /> -->
+
+
+        <link name="upper_jaws">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${upper_fingers_width}"
+                        length="${upper_fingers_length}"
+                        height="${upper_fingers_height}">
+                <origin xyz="${upper_fingers_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/upper_jaws.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/collision/upper_jaws.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="upper_jaws_joint" type="revolute">
+            <parent link="gripper_link"/>
+            <child link="upper_jaws"/>
+            <origin xyz="0.01 0.000 0.01" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+            <limit lower="-0.70" upper="0.27" effort="50" velocity="0.14"/>
+        </joint>
+
+        <xacro:simple_transmission joint="upper_jaws_joint" />
+
+        <link name="lower_jaws">
+            <xacro:link_box_inertial mass="1.0"
+                        width="${lower_hand_width}"
+                        length="${lower_hand_length}"
+                        height="${lower_hand_height}">
+                <origin xyz="${lower_hand_com}" rpy="0 0 0"/>
+            </xacro:link_box_inertial>
+
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/visual/lower_jaws.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </visual>
+
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="file://$(find my_manipulator_description)/meshes/collision/lower_jaws.dae" scale="1.0 1.0 1.0"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="lower_jaws_joint" type="revolute">
+            <parent link="gripper_link"/>
+            <child link="lower_jaws"/>
+            <origin xyz="-0.01 0.000 -0.01" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+            <limit lower="-0.27" upper="0.70" effort="50" velocity="0.14"/>
+        </joint>
+
+        <xacro:simple_transmission joint="lower_jaws_joint" />
+
+    
+    </xacro:macro>
+        
+</robot>

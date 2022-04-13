@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="uuv_name" default="$(arg namespace)"/>
+    <arg name="arm_name" default="dlut_auv_manipulator"/>
+    <arg name="axis_azimuth" default="$(arg axis_azimuth)"/>
+    <arg name="axis_elevation" default="$(arg axis_elevation)"/>
+    <arg name="axis_first_elbow" default="$(arg axis_first_elbow)"/>
+    <arg name="axis_second_elbow" default="$(arg axis_second_elbow)"/>
+    <arg name="axis_upper_wrist" default="$(arg axis_upper_wrist)"/>
+    <arg name="deadman_button" default="$(arg deadman_button)"/>
+    <arg name="home_button" default="$(arg home_button)"/>    
+
+    <node pkg="joy" type="joy_node" name="joy_node" output="log" respawn="false" respawn_delay="0">
+        
+    </node>
+
+    node
+
+</launch>

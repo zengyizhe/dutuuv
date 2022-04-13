@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- <node pkg="joy" type="joy_node" name="joy"/> -->
+    
+    <arg name="joy_type" default="xbox"/>
+    
+    <arg name="left_jaw_publish_topic" default="xxx"/>
+    <arg name="right_jaw_publish_topic" default="xxx"/>
+    
+    <node pkg="gripper_teleop" type="joy_teleop.py" name="joy_teleop">
+        <rosparam file="$(find gripper_teleop)/config/$(arg joy_type)_mappings.yaml" command="load"/>
+        <rosparam file="$(find gripper_teleop)/config/joint_limits.yaml" command="load"/>
+        <remap from="left_jaw_publish_topic" to="$(arg left_jaw_publish_topic)"/>
+        <remap from="right_jaw_publish_topic" to="$(arg right_jaw_publish_topic)"/>
+    </node>
+
+</launch>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="guppy_control" type="depth_control_action_server.py" name="depth_control_action_server" output="screen" required="true">
+    </node>    
+</launch>
+  

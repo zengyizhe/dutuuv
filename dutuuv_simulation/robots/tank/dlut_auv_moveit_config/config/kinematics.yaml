@@ -1,0 +1,4 @@
+my_manipulator_arm:
+  kinematics_solver: dlut_auv_my_manipulator_arm/IKFastKinematicsPlugin
+  kinematics_solver_search_resolution: 0.005
+  kinematics_solver_timeout: 0.005

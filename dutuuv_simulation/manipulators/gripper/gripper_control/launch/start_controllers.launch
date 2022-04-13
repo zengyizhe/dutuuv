@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <rosparam file="$(find gripper_control)/config/controllers.yaml" command="load"/>
+    <node pkg="controller_manager" type="spawner" name="controller_spawner" ns="tank" args="left_jaw_controller right_jaw_controller"/>
+</launch>
