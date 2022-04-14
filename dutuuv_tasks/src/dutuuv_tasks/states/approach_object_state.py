@@ -5,40 +5,28 @@ import rospy
 import smach 
 from yolov5_pytorch_ros.msg import BoundingBox, BoundingBoxes
 from geometry_msgs.msg import Twist
+from dutuuv_tasks.states.sit_down_state import SitDown
+from dutuuv_control.PidController import PidController
 
 
-class ObjectTrackingState(smach.State):
-    def __init__(self, goal: ObjectTrackingGoal):
+class ApproachObject(smach.State):
+    def __init__(self):
         smach.State.__init__(self, outcomes=['succeeded', 'aborted', 'preempted'])
 
         self.vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
         self.img_width = 640
         self.img_height = 480
 
-        self.goal = goal
-        
+        self.orientation_controller = PidController(0.5, 0.0, 0.0, 1.0)
 
     def execute(self, userdata):
-        self.action_client.send_goal(self.goal, feedback_cb=self.feedback_cb)
-        self.action_client.wait_for_result()
-        
-        result_state = self.action_client.get_state()
-        
-        # actionlib PREEMPTED=2
-        if result_state == 2: 
-            return 'preempted'
-        
-        # actionlib SUCCEEDED=3
-        elif result_state == 3:
-            return 'succeeded'
-        
-        # actionlib ABORTED=4
-        elif result_state == 4:
-            return 'aborted'
-
+        if self.bbox_area_ratio < 0.05:
+            return 'success'
 
 
     def bboxes_cb(self, bboxes_msg: BoundingBoxes):
+        if bboxes_msg.bounding_boxes[0].Class == 'None': 
+            return
 
         bbox = bboxes_msg.bounding_boxes[0]
         self.object_x = (bbox.xmin + bbox.xmax) / 2
